@@ -1,28 +1,7 @@
-# Streamlit Cloud Deployment Requirements
-# Python 3.11+ compatible
-
-# Core Framework
-streamlit>=1.28.0
-
-# PyTorch (CPU-only for cloud deployment - smaller size)
-torch>=2.5.0
-torchvision>=0.20.0
-
-# Image Processing
+﻿gradio>=4.0.0
+torch>=2.0.0
+torchvision>=0.15.0
 Pillow>=10.0.0
-opencv-python-headless>=4.8.0.76
-
-# Data Science
 numpy>=1.24.0
 pandas>=2.0.0
-scipy>=1.11.0
-
-# Visualization
-matplotlib>=3.7.0
-seaborn>=0.12.0
-
-# Google Drive Integration
 gdown>=4.7.1
-
-# Utilities
-python-dateutil>=2.8.2
