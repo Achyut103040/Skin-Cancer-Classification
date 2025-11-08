@@ -1,0 +1,76 @@
+# ========================================
+# DATASETS (10+ GB) - Use Google Drive
+# ========================================
+images/
+HAM10000_images_part_1/
+HAM10000_images_part_2/
+combined_dataset/
+kfold_combined_dataset/
+
+# ========================================
+# MODELS (500+ MB) - Use Google Drive
+# ========================================
+*.pth
+*.pt
+*.h5
+*.pkl
+*.onnx
+models/
+deployment_package/
+
+# ========================================
+# TRAINING RESULTS (3+ GB) - Too Large
+# ========================================
+benign_cascade_results/
+training_results/
+model_explanations/
+kfold_results_5fold/
+final_comparison_report/
+cascade_evaluation_results/
+*_experiments/
+bcc_experiments/
+
+# ========================================
+# VIRTUAL ENVIRONMENTS (5+ GB)
+# ========================================
+my_env/
+venv/
+env/
+ENV/
+.venv/
+venv.bak/
+pythonenv*/
+
+# ========================================
+# PYTHON CACHE
+# ========================================
+__pycache__/
+*.pyc
+*.pyo
+*.py[cod]
+
+# ========================================
+# UPLOADS & TEMP
+# ========================================
+web_interface/uploads/
+uploads/
+*.tmp
+temp/
+tmp/
+*.log
+
+# ========================================
+# IDE & OS
+# ========================================
+.vscode/
+.idea/
+*.swp
+.DS_Store
+Thumbs.db
+.env
+
+# ========================================
+# KEEP THESE SMALL FILES
+# ========================================
+!HAM10000_metadata.csv
+!web_interface/static/*.pdf
