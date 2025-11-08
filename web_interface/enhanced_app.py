@@ -21,10 +21,67 @@ import matplotlib
 matplotlib.use('Agg')  # Use non-GUI backend
 import matplotlib.pyplot as plt
 from pathlib import Path
+import gdown  # For Google Drive downloads
 
-# Set the base path
-BASE_PATH = r'd:\Skin Cancer'
+# Set the base path - works for both local and cloud deployment
+if os.path.exists('d:\\Skin Cancer'):
+    BASE_PATH = r'd:\Skin Cancer'
+else:
+    BASE_PATH = os.path.dirname(os.path.abspath(__file__))
+    
 sys.path.append(BASE_PATH)
+
+# ========================================
+# GOOGLE DRIVE MODEL CONFIGURATION
+# ========================================
+GDRIVE_MODEL_URLS = {
+    'binary': 'https://drive.google.com/uc?id=1LJefcrYSiUOPID-McuxRScoMCGiAVnIF',
+    'nv': 'https://drive.google.com/uc?id=17SABbRU3PTLMjMwO68aBNqTwl6YnOI7M',
+    'bkl': 'https://drive.google.com/uc?id=1xsuzyEpXgw8o3w_YNRCVh04brGzXbtot',
+    'bcc': 'https://drive.google.com/uc?id=1FzHyl8ZNeZh4tHjF076w4pDxujypa6Fo',
+    'akiec': 'https://drive.google.com/uc?id=19dYv01tNC-5bpgvvmx9bB3ZbHrT9ZUMi',
+    'vasc': 'https://drive.google.com/uc?id=1nhKd2xKyjLerlXEbNPemx3P9axmTjlTo',
+}
+
+USE_GDRIVE_MODELS = True  # Enable Google Drive model downloading
+
+def download_models_from_gdrive():
+    """
+    Download all model files from Google Drive if they don't exist locally.
+    This runs once on app startup.
+    """
+    models_dir = os.path.join(BASE_PATH, 'models')
+    os.makedirs(models_dir, exist_ok=True)
+    
+    model_files = {
+        'binary': os.path.join(models_dir, 'best_skin_cancer_model_balanced.pth'),
+        'nv': os.path.join(models_dir, 'nv_model.pth'),
+        'bkl': os.path.join(models_dir, 'bkl_model_cascade_fixed.pth'),
+        'bcc': os.path.join(models_dir, 'bcc_model.pth'),
+        'akiec': os.path.join(models_dir, 'akiec_model.pth'),
+        'vasc': os.path.join(models_dir, 'vasc_model.pth'),
+    }
+    
+    print("🔍 Checking for model files...")
+    
+    for model_name, model_path in model_files.items():
+        if not os.path.exists(model_path):
+            if USE_GDRIVE_MODELS and model_name in GDRIVE_MODEL_URLS:
+                try:
+                    print(f"📥 Downloading {model_name} model from Google Drive...")
+                    gdown.download(GDRIVE_MODEL_URLS[model_name], model_path, quiet=False)
+                    print(f"✅ Downloaded {model_name} model successfully!")
+                except Exception as e:
+                    print(f"❌ Failed to download {model_name} model: {e}")
+        else:
+            print(f"✅ {model_name} model already exists locally")
+    
+    return models_dir
+
+# Download models on startup
+print("🚀 Initializing models...")
+MODELS_DIR = download_models_from_gdrive()
+print(f"📂 Models directory: {MODELS_DIR}")
 
 # Import enhanced model architecture from the main cascade script
 class OriginalSkinCancerModel(nn.Module):
@@ -226,7 +283,10 @@ class SkinCancerModel(nn.Module):
 class BenignCascadeClassifier:
     """Cascade classifier for benign skin lesion classification."""
     
-    def __init__(self, models_dir='d:/Skin Cancer/benign_cascade_results/models'):
+    def __init__(self, models_dir=None):
+        # Use globally downloaded models directory
+        if models_dir is None:
+            models_dir = MODELS_DIR
         self.models_dir = Path(models_dir)
         self.device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
         self.class_order = ['nv', 'bkl', 'bcc', 'akiec', 'vasc', 'df']
@@ -328,7 +388,10 @@ class BenignCascadeClassifier:
 class BinaryClassifier:
     """Binary classifier for malignant vs benign detection."""
     
-    def __init__(self, model_path='d:/Skin Cancer/best_skin_cancer_model_balanced.pth'):
+    def __init__(self, model_path=None):
+        # Use globally downloaded binary model
+        if model_path is None:
+            model_path = os.path.join(MODELS_DIR, 'best_skin_cancer_model_balanced.pth')
         self.device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
         self.model = None
         self.load_model(model_path)
