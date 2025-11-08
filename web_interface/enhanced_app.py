@@ -434,28 +434,25 @@ class BinaryClassifier:
             }
         }
 
-# Initialize classifiers with lazy loading
-print("🔄 Initializing classifiers (lazy loading enabled)...")
-binary_classifier = None
-cascade_classifier = None
+# Initialize classifiers - preload on startup to avoid timeout on first request
+print("🔄 Preloading classifiers on startup...")
+print("📥 Loading binary classifier...")
+binary_classifier = BinaryClassifier()
+print("✅ Binary classifier loaded!")
+
+print("📥 Loading cascade classifier...")
+cascade_classifier = BenignCascadeClassifier()
+print("✅ Cascade classifier loaded!")
+
+print("✅ All classifiers preloaded successfully!")
 
 def get_binary_classifier():
-    """Lazy load binary classifier on first use."""
-    global binary_classifier
-    if binary_classifier is None:
-        print("📥 Loading binary classifier...")
-        binary_classifier = BinaryClassifier()
+    """Get binary classifier (already loaded)."""
     return binary_classifier
 
 def get_cascade_classifier():
-    """Lazy load cascade classifier on first use."""
-    global cascade_classifier
-    if cascade_classifier is None:
-        print("📥 Loading cascade classifier...")
-        cascade_classifier = BenignCascadeClassifier()
+    """Get cascade classifier (already loaded)."""
     return cascade_classifier
-
-print("✅ Classifiers ready for lazy loading!")
 
 # Original GradCAM class (simplified)
 class GradCAM:
