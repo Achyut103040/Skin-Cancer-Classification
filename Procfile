@@ -1,1 +1,1 @@
-web: gunicorn --chdir web_interface enhanced_app:app --bind 0.0.0.0:$PORT --workers 2 --timeout 120
+web: gunicorn --chdir web_interface enhanced_app:app --bind 0.0.0.0:$PORT --workers 1 --threads 2 --timeout 300 --max-requests 100 --max-requests-jitter 10 --preload

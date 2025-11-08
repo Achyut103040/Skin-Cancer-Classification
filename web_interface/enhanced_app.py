@@ -44,11 +44,12 @@ GDRIVE_MODEL_URLS = {
 }
 
 USE_GDRIVE_MODELS = True  # Enable Google Drive model downloading
+LAZY_LOAD_MODELS = True  # Load models on-demand to save memory
 
 def download_models_from_gdrive():
     """
     Download all model files from Google Drive if they don't exist locally.
-    This runs once on app startup.
+    This runs once on app startup or on-demand.
     """
     models_dir = os.path.join(BASE_PATH, 'models')
     os.makedirs(models_dir, exist_ok=True)
@@ -78,10 +79,11 @@ def download_models_from_gdrive():
     
     return models_dir
 
-# Download models on startup
-print("🚀 Initializing models...")
+# Download models on startup (but don't load into memory yet)
+print("🚀 Initializing models directory...")
 MODELS_DIR = download_models_from_gdrive()
 print(f"📂 Models directory: {MODELS_DIR}")
+print("💡 Using lazy loading to optimize memory usage")
 
 # Import enhanced model architecture from the main cascade script
 class OriginalSkinCancerModel(nn.Module):
@@ -432,11 +434,28 @@ class BinaryClassifier:
             }
         }
 
-# Initialize classifiers
-print("🔄 Loading classifiers...")
-binary_classifier = BinaryClassifier()
-cascade_classifier = BenignCascadeClassifier()
-print("✅ Classifiers loaded successfully!")
+# Initialize classifiers with lazy loading
+print("🔄 Initializing classifiers (lazy loading enabled)...")
+binary_classifier = None
+cascade_classifier = None
+
+def get_binary_classifier():
+    """Lazy load binary classifier on first use."""
+    global binary_classifier
+    if binary_classifier is None:
+        print("📥 Loading binary classifier...")
+        binary_classifier = BinaryClassifier()
+    return binary_classifier
+
+def get_cascade_classifier():
+    """Lazy load cascade classifier on first use."""
+    global cascade_classifier
+    if cascade_classifier is None:
+        print("📥 Loading cascade classifier...")
+        cascade_classifier = BenignCascadeClassifier()
+    return cascade_classifier
+
+print("✅ Classifiers ready for lazy loading!")
 
 # Original GradCAM class (simplified)
 class GradCAM:
@@ -543,7 +562,7 @@ def enhanced_predict_image(img_tensor):
     img_tensor = img_tensor.to(device)
     
     # Step 1: Binary classification (Malignant vs Benign)
-    binary_result = binary_classifier.predict(img_tensor)
+    binary_result = get_binary_classifier().predict(img_tensor)
     
     result = {
         'binary_prediction': binary_result['prediction'],
@@ -553,7 +572,7 @@ def enhanced_predict_image(img_tensor):
     
     # Step 2: If benign, run cascade classification
     if binary_result['prediction'] == 'Benign':
-        cascade_result = cascade_classifier.predict_cascade(img_tensor)
+        cascade_result = get_cascade_classifier().predict_cascade(img_tensor)
         result.update({
             'cascade_prediction': cascade_result['prediction'],
             'cascade_confidence': cascade_result['confidence'],
@@ -914,7 +933,7 @@ def analyze_dataset_image():
             input_tensor = input_tensor.cuda()
         
         # Binary classification
-        binary_result = binary_classifier.predict(input_tensor)
+        binary_result = get_binary_classifier().predict(input_tensor)
         binary_prediction = binary_result['prediction'].lower()
         binary_confidence = float(binary_result['confidence'])
         
@@ -924,7 +943,7 @@ def analyze_dataset_image():
         
         # If benign, run cascade classification
         if binary_prediction == 'benign':
-            cascade_result = cascade_classifier.predict_cascade(input_tensor)
+            cascade_result = get_cascade_classifier().predict_cascade(input_tensor)
             if cascade_result and 'prediction' in cascade_result:
                 cascade_prediction = cascade_result['prediction']
                 cascade_confidence = float(cascade_result['confidence'])
