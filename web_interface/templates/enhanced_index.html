@@ -1,0 +1,629 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enhanced Skin Cancer Detection</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style> html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enhanced Skin Cancer Detection - AI-Powered Diagnosis</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        
+        /* Professional Navigation Bar */
+        .top-navbar {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(79, 172, 254, 0.2);
+            padding: 0.8rem 0;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 20px rgba(0,0,0,0.1);
+        }
+        
+        .navbar-brand {
+            font-weight: 700;
+            font-size: 1.4rem;
+            color: #4facfe !important;
+            text-decoration: none;
+        }
+        
+        .navbar-nav .nav-link {
+            color: #333 !important;
+            font-weight: 500;
+            margin: 0 0.5rem;
+            padding: 0.5rem 1rem !important;
+            border-radius: 25px;
+            transition: all 0.3s ease;
+        }
+        
+        .navbar-nav .nav-link:hover {
+            background: linear-gradient(135deg, #4facfe, #00f2fe);
+            color: white !important;
+            transform: translateY(-2px);
+        }
+        
+        .nav-cta {
+            background: linear-gradient(135deg, #4facfe, #00f2fe) !important;
+            color: white !important;
+            font-weight: 600;
+            border-radius: 25px !important;
+            padding: 0.6rem 1.5rem !important;
+            margin-left: 1rem;
+        }
+        
+        .nav-cta:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(79, 172, 254, 0.4);
+        }
+        
+        /* Main container adjustments */
+        .main-container {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            backdrop-filter: blur(10px);
+            margin: 6rem auto 2rem;
+            max-width: 1200px;
+        }
+        
+        .header-section {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+            border-radius: 20px 20px 0 0;
+            padding: 2rem;
+            text-align: center;
+        }
+        
+        .upload-section {
+            padding: 2rem;
+        }
+        
+        .file-upload-area {
+            border: 3px dashed #4facfe;
+            border-radius: 15px;
+            padding: 3rem;
+            text-align: center;
+            background: rgba(79, 172, 254, 0.05);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .file-upload-area:hover {
+            border-color: #00f2fe;
+            background: rgba(79, 172, 254, 0.1);
+            transform: translateY(-2px);
+        }
+        
+        .file-upload-area.dragover {
+            border-color: #00f2fe;
+            background: rgba(79, 172, 254, 0.15);
+        }
+        
+        .results-section {
+            padding: 2rem;
+            display: none;
+        }
+        
+        .result-card {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            padding: 1.5rem;
+            margin: 1rem 0;
+            border-left: 5px solid #4facfe;
+        }
+        
+        .prediction-badge {
+            font-size: 1.2rem;
+            padding: 0.5rem 1rem;
+            border-radius: 25px;
+            font-weight: bold;
+        }
+        
+        .prediction-malignant {
+            background: linear-gradient(135deg, #ff6b6b, #ee5a52);
+            color: white;
+        }
+        
+        .prediction-benign {
+            background: linear-gradient(135deg, #51cf66, #40c057);
+            color: white;
+        }
+        
+        .confidence-bar {
+            height: 10px;
+            border-radius: 5px;
+            background: #e9ecef;
+            overflow: hidden;
+            margin: 0.5rem 0;
+        }
+        
+        .confidence-fill {
+            height: 100%;
+            border-radius: 5px;
+            transition: width 0.3s ease;
+        }
+        
+        .cascade-results {
+            background: rgba(79, 172, 254, 0.05);
+            border-radius: 10px;
+            padding: 1rem;
+            margin: 1rem 0;
+        }
+        
+        .cascade-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.5rem 0;
+            border-bottom: 1px solid rgba(79, 172, 254, 0.2);
+        }
+        
+        .cascade-item:last-child {
+            border-bottom: none;
+        }
+        
+        .loading-spinner {
+            display: none;
+            text-align: center;
+            padding: 2rem;
+        }
+        
+        .explanation-section {
+            margin-top: 2rem;
+            text-align: center;
+        }
+        
+        .explanation-image {
+            max-width: 100%;
+            border-radius: 10px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+        
+        .step-indicator {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 1rem 0;
+        }
+        
+        .step {
+            display: flex;
+            align-items: center;
+            margin: 0 1rem;
+        }
+        
+        .step-number {
+            background: #4facfe;
+            color: white;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            margin-right: 0.5rem;
+        }
+        
+        .step.active .step-number {
+            background: #00f2fe;
+            animation: pulse 1s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+        
+        .info-section {
+            background: rgba(79, 172, 254, 0.05);
+            border-radius: 15px;
+            padding: 2rem;
+            margin: 2rem 0;
+        }
+        
+        .feature-card {
+            background: white;
+            border-radius: 10px;
+            padding: 1.5rem;
+            margin: 1rem 0;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+        
+        .feature-icon {
+            font-size: 3rem;
+            color: #4facfe;
+            margin-bottom: 1rem;
+        }
+    </style>
+</head>
+<body>
+    <!-- Professional Navigation Bar -->
+    <nav class="navbar navbar-expand-lg top-navbar">
+        <div class="container">
+            <a class="navbar-brand" href="/">
+                <i class="fas fa-microscope"></i> SkinCancerAI
+            </a>
+            
+            <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <i class="fas fa-bars text-primary"></i>
+            </button>
+            
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/"><i class="fas fa-home"></i> Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/about"><i class="fas fa-info-circle"></i> About</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/gallery"><i class="fas fa-images"></i> Gallery</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/documentation"><i class="fas fa-book"></i> Docs</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/publications"><i class="fas fa-graduation-cap"></i> Publications</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/results"><i class="fas fa-chart-line"></i> Results</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/history"><i class="fas fa-clock"></i> History</a>
+                    </li>
+                </ul>
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link nav-cta" href="/contact"><i class="fas fa-envelope"></i> Contact</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="https://github.com/Achyut103040/Skin-Cancer-detection-and-Classification" target="_blank">
+                            <i class="fab fa-github"></i> GitHub
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container-fluid">
+        <div class="main-container">
+            <!-- Header -->
+            <div class="header-section">
+                <h1><i class="fas fa-microscope"></i> Enhanced Skin Cancer Detection</h1>
+                <p class="lead">AI-Powered Binary & Cascade Classification System</p>
+                
+                <!-- Step Indicator -->
+                <div class="step-indicator">
+                    <div class="step" id="step1">
+                        <div class="step-number">1</div>
+                        <span>Binary Classification</span>
+                    </div>
+                    <i class="fas fa-arrow-right text-white mx-2"></i>
+                    <div class="step" id="step2">
+                        <div class="step-number">2</div>
+                        <span>Cascade Classification</span>
+                    </div>
+                    <i class="fas fa-arrow-right text-white mx-2"></i>
+                    <div class="step" id="step3">
+                        <div class="step-number">3</div>
+                        <span>Final Diagnosis</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Upload Section -->
+            <div class="upload-section">
+                <div class="file-upload-area" id="uploadArea">
+                    <i class="fas fa-cloud-upload-alt fa-3x text-primary mb-3"></i>
+                    <h4>Upload Skin Lesion Image</h4>
+                    <p class="text-muted">Drag and drop your image here or click to browse</p>
+                    <p class="small text-muted">Supports PNG, JPG, JPEG (Max 16MB)</p>
+                    <input type="file" id="imageInput" accept=".png,.jpg,.jpeg" style="display: none;">
+                    <button class="btn btn-primary btn-lg mt-3" onclick="document.getElementById('imageInput').click()">
+                        <i class="fas fa-folder-open"></i> Choose File
+                    </button>
+                </div>
+                
+                <div class="text-center mt-3">
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="checkbox" id="generateExplanation" checked>
+                        <label class="form-check-label" for="generateExplanation">
+                            Generate AI Explanation (GradCAM)
+                        </label>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Loading Spinner -->
+            <div class="loading-spinner" id="loadingSpinner">
+                <div class="spinner-border text-primary" role="status" style="width: 3rem; height: 3rem;">
+                    <span class="visually-hidden">Loading...</span>
+                </div>
+                <h4 class="mt-3">Analyzing Image...</h4>
+                <p class="text-muted">Running AI classification pipeline</p>
+            </div>
+            
+            <!-- Results Section -->
+            <div class="results-section" id="resultsSection">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="result-card">
+                            <h5><i class="fas fa-image"></i> Uploaded Image</h5>
+                            <img id="uploadedImage" class="img-fluid rounded" style="max-height: 300px;">
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-6">
+                        <div class="result-card">
+                            <h5><i class="fas fa-brain"></i> AI Diagnosis</h5>
+                            <div id="finalPrediction" class="prediction-badge mb-3"></div>
+                            <div id="finalConfidence" class="confidence-bar"></div>
+                            <p id="confidenceText" class="small text-muted"></p>
+                        </div>
+                        
+                        <div class="result-card">
+                            <h5><i class="fas fa-binary"></i> Binary Classification</h5>
+                            <div id="binaryResult"></div>
+                        </div>
+                        
+                        <div class="result-card" id="cascadeCard" style="display: none;">
+                            <h5><i class="fas fa-layer-group"></i> Cascade Classification</h5>
+                            <div id="cascadeResult"></div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Explanation Section -->
+                <div class="explanation-section" id="explanationSection" style="display: none;">
+                    <div class="result-card">
+                        <h5><i class="fas fa-eye"></i> AI Explanation (GradCAM)</h5>
+                        <img id="explanationImage" class="explanation-image">
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Information Section -->
+            <div class="info-section">
+                <h3 class="text-center mb-4"><i class="fas fa-info-circle"></i> How It Works</h3>
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="feature-card">
+                            <i class="fas fa-search feature-icon"></i>
+                            <h5>Binary Classification</h5>
+                            <p>First, our AI determines if the lesion is malignant (melanoma) or benign using a trained ResNet50 model.</p>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="feature-card">
+                            <i class="fas fa-sitemap feature-icon"></i>
+                            <h5>Cascade Classification</h5>
+                            <p>If benign, the image goes through our cascade system to identify the specific type of benign lesion.</p>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="feature-card">
+                            <i class="fas fa-chart-line feature-icon"></i>
+                            <h5>Detailed Analysis</h5>
+                            <p>Get confidence scores, visual explanations, and detailed breakdowns of the AI's decision process.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="row mt-4">
+                    <div class="col-md-12">
+                        <div class="alert alert-info" role="alert">
+                            <h6><i class="fas fa-exclamation-triangle"></i> Medical Disclaimer</h6>
+                            This AI system is for educational and research purposes only. Always consult a qualified dermatologist for medical advice and diagnosis.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // File upload handling
+        const uploadArea = document.getElementById('uploadArea');
+        const imageInput = document.getElementById('imageInput');
+        const loadingSpinner = document.getElementById('loadingSpinner');
+        const resultsSection = document.getElementById('resultsSection');
+        
+        // Drag and drop functionality
+        uploadArea.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            uploadArea.classList.add('dragover');
+        });
+        
+        uploadArea.addEventListener('dragleave', () => {
+            uploadArea.classList.remove('dragover');
+        });
+        
+        uploadArea.addEventListener('drop', (e) => {
+            e.preventDefault();
+            uploadArea.classList.remove('dragover');
+            const files = e.dataTransfer.files;
+            if (files.length > 0) {
+                handleFile(files[0]);
+            }
+        });
+        
+        uploadArea.addEventListener('click', () => {
+            imageInput.click();
+        });
+        
+        imageInput.addEventListener('change', (e) => {
+            if (e.target.files.length > 0) {
+                handleFile(e.target.files[0]);
+            }
+        });
+        
+        function handleFile(file) {
+            if (!file.type.startsWith('image/')) {
+                alert('Please select an image file.');
+                return;
+            }
+            
+            const formData = new FormData();
+            formData.append('file', file);
+            formData.append('explanation', document.getElementById('generateExplanation').checked);
+            
+            // Show loading
+            loadingSpinner.style.display = 'block';
+            resultsSection.style.display = 'none';
+            
+            // Animate steps
+            animateSteps();
+            
+            fetch('/upload', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.error) {
+                    alert('Error: ' + data.error);
+                    loadingSpinner.style.display = 'none';
+                } else {
+                    displayResults(data);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('An error occurred while processing the image.');
+                loadingSpinner.style.display = 'none';
+            });
+        }
+        
+        function animateSteps() {
+            const steps = ['step1', 'step2', 'step3'];
+            let currentStep = 0;
+            
+            const stepInterval = setInterval(() => {
+                // Remove active class from all steps
+                steps.forEach(id => document.getElementById(id).classList.remove('active'));
+                
+                // Add active class to current step
+                document.getElementById(steps[currentStep]).classList.add('active');
+                
+                currentStep++;
+                if (currentStep >= steps.length) {
+                    clearInterval(stepInterval);
+                }
+            }, 1500);
+        }
+        
+        function displayResults(data) {
+            loadingSpinner.style.display = 'none';
+            resultsSection.style.display = 'block';
+            
+            // Display uploaded image
+            document.getElementById('uploadedImage').src = data.image;
+            
+            const result = data.result;
+            
+            // Final prediction
+            const finalPrediction = document.getElementById('finalPrediction');
+            const finalConfidence = document.getElementById('finalConfidence');
+            const confidenceText = document.getElementById('confidenceText');
+            
+            finalPrediction.textContent = result.final_prediction;
+            finalPrediction.className = 'prediction-badge ' + 
+                (result.binary_prediction === 'Malignant' ? 'prediction-malignant' : 'prediction-benign');
+            
+            // Confidence bar
+            const confidencePercent = result.final_confidence;
+            finalConfidence.innerHTML = `<div class="confidence-fill" style="width: ${confidencePercent}%; background: ${result.binary_prediction === 'Malignant' ? '#ff6b6b' : '#51cf66'};"></div>`;
+            confidenceText.textContent = `Confidence: ${confidencePercent.toFixed(1)}%`;
+            
+            // Binary classification results
+            const binaryResult = document.getElementById('binaryResult');
+            binaryResult.innerHTML = `
+                <p><strong>Prediction:</strong> ${result.binary_prediction}</p>
+                <p><strong>Confidence:</strong> ${result.binary_confidence.toFixed(1)}%</p>
+                <div class="mt-2">
+                    <small class="text-muted">Probabilities:</small><br>
+                    <small>Benign: ${result.binary_probabilities.Benign.toFixed(1)}%</small><br>
+                    <small>Malignant: ${result.binary_probabilities.Malignant.toFixed(1)}%</small>
+                </div>
+            `;
+            
+            // Cascade results (if available)
+            const cascadeCard = document.getElementById('cascadeCard');
+            const cascadeResult = document.getElementById('cascadeResult');
+            
+            if (result.cascade_prediction) {
+                cascadeCard.style.display = 'block';
+                
+                let cascadeHtml = `
+                    <p><strong>Specific Type:</strong> ${result.cascade_full_name}</p>
+                    <p><strong>Confidence:</strong> ${result.cascade_confidence.toFixed(1)}%</p>
+                    <div class="cascade-results">
+                        <h6>All Cascade Predictions:</h6>
+                `;
+                
+                const classNames = {
+                    'nv': 'Melanocytic Nevus',
+                    'bkl': 'Benign Keratosis',
+                    'bcc': 'Basal Cell Carcinoma',
+                    'akiec': 'Actinic Keratosis',
+                    'vasc': 'Vascular Lesion',
+                    'df': 'Dermatofibroma'
+                };
+                
+                for (const [classCode, confidence] of Object.entries(result.cascade_all_predictions)) {
+                    const className = classNames[classCode] || classCode;
+                    cascadeHtml += `
+                        <div class="cascade-item">
+                            <span>${className}</span>
+                            <span><strong>${confidence.toFixed(1)}%</strong></span>
+                        </div>
+                    `;
+                }
+                
+                cascadeHtml += '</div>';
+                cascadeResult.innerHTML = cascadeHtml;
+            } else {
+                cascadeCard.style.display = 'none';
+            }
+            
+            // Explanation image
+            const explanationSection = document.getElementById('explanationSection');
+            const explanationImage = document.getElementById('explanationImage');
+            
+            if (data.explanation) {
+                explanationSection.style.display = 'block';
+                explanationImage.src = data.explanation;
+            } else {
+                explanationSection.style.display = 'none';
+            }
+            
+            // Scroll to results
+            resultsSection.scrollIntoView({ behavior: 'smooth' });
+        }
+    </script>
+</body>
+</html>

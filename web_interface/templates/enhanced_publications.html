@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Publications - Enhanced Skin Cancer Detection</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        .main-container {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            backdrop-filter: blur(10px);
+            margin: 2rem auto;
+            max-width: 1200px;
+        }
+        
+        .header-section {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+            border-radius: 20px 20px 0 0;
+            padding: 2rem;
+            text-align: center;
+        }
+        
+        .content-section {
+            padding: 2rem;
+        }
+        
+        .publication-card {
+            background: white;
+            border-radius: 15px;
+            padding: 2rem;
+            margin: 2rem 0;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+        }
+        
+        .publication-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+        }
+        
+        .publication-type {
+            background: linear-gradient(135deg, #4facfe, #00f2fe);
+            color: white;
+            padding: 0.3rem 0.8rem;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            display: inline-block;
+            margin-bottom: 1rem;
+        }
+        
+        .publication-type.preprint {
+            background: linear-gradient(135deg, #ffc107, #ff8c00);
+        }
+        
+        .publication-type.journal {
+            background: linear-gradient(135deg, #28a745, #20c997);
+        }
+        
+        .publication-type.conference {
+            background: linear-gradient(135deg, #6f42c1, #e83e8c);
+        }
+        
+        .publication-type.workshop {
+            background: linear-gradient(135deg, #fd7e14, #e83e8c);
+        }
+        
+        .citation-box {
+            background: #f8f9fa;
+            border-left: 4px solid #4facfe;
+            padding: 1rem;
+            margin: 1rem 0;
+            border-radius: 0 10px 10px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+        }
+        
+        .impact-metrics {
+            background: rgba(79, 172, 254, 0.05);
+            border-radius: 10px;
+            padding: 1rem;
+            margin: 1rem 0;
+        }
+        
+        .metric-item {
+            display: inline-block;
+            margin: 0.5rem 1rem 0.5rem 0;
+            padding: 0.3rem 0.8rem;
+            background: white;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        
+        .nav-link {
+            color: #4facfe;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        
+        .nav-link:hover {
+            color: #00f2fe;
+        }
+        
+        .abstract-preview {
+            max-height: 100px;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+        }
+        
+        .abstract-preview.expanded {
+            max-height: none;
+        }
+        
+        .btn-expand {
+            color: #4facfe;
+            cursor: pointer;
+            font-size: 0.9rem;
+        }
+        
+        .btn-expand:hover {
+            color: #00f2fe;
+        }
+        
+        .author-highlight {
+            font-weight: bold;
+            color: #4facfe;
+        }
+        
+        .status-badge {
+            float: right;
+            padding: 0.2rem 0.6rem;
+            border-radius: 10px;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+        
+        .status-badge.published {
+            background: #28a745;
+            color: white;
+        }
+        
+        .status-badge.submitted {
+            background: #ffc107;
+            color: black;
+        }
+        
+        .status-badge.preparation {
+            background: #6c757d;
+            color: white;
+        }
+        
+        .research-section {
+            margin: 2rem 0;
+        }
+        
+        .research-area {
+            background: white;
+            border-radius: 15px;
+            padding: 1.5rem;
+            margin: 1rem 0;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        /* Professional Navigation Bar */
+        .top-navbar {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(79, 172, 254, 0.2);
+            padding: 0.8rem 0;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 20px rgba(0,0,0,0.1);
+        }
+        
+        .navbar-brand {
+            font-weight: 700;
+            font-size: 1.4rem;
+            color: #4facfe !important;
+            text-decoration: none;
+        }
+        
+        .navbar-nav .nav-link {
+            color: #333 !important;
+            font-weight: 500;
+            margin: 0 0.5rem;
+            padding: 0.5rem 1rem !important;
+            border-radius: 25px;
+            transition: all 0.3s ease;
+        }
+        
+        .navbar-nav .nav-link:hover {
+            background: linear-gradient(135deg, #4facfe, #00f2fe);
+            color: white !important;
+            transform: translateY(-2px);
+        }
+        
+        .nav-cta {
+            background: linear-gradient(135deg, #4facfe, #00f2fe) !important;
+            color: white !important;
+            font-weight: 600;
+            border-radius: 25px !important;
+            padding: 0.6rem 1.5rem !important;
+            margin-left: 1rem;
+        }
+        
+        .nav-cta:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(79, 172, 254, 0.4);
+        }
+        
+        .main-container {
+            margin-top: 5rem;
+        }
+    </style>
+</head>
+<body>
+    <!-- Professional Navigation Bar -->
+    <nav class="navbar navbar-expand-lg top-navbar">
+        <div class="container">
+            <a class="navbar-brand" href="/">
+                <i class="fas fa-microscope"></i> SkinCancerAI
+            </a>
+            
+            <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <i class="fas fa-bars text-primary"></i>
+            </button>
+            
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/"><i class="fas fa-home"></i> Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/about"><i class="fas fa-info-circle"></i> About</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/gallery"><i class="fas fa-images"></i> Gallery</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/documentation"><i class="fas fa-book"></i> Docs</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/publications"><i class="fas fa-graduation-cap"></i> Publications</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/results"><i class="fas fa-chart-line"></i> Results</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/history"><i class="fas fa-clock"></i> History</a>
+                    </li>
+                </ul>
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link nav-cta" href="/contact"><i class="fas fa-envelope"></i> Contact</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="https://github.com/Achyut103040/Skin-Cancer-detection-and-Classification" target="_blank">
+                            <i class="fab fa-github"></i> GitHub
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container-fluid">
+        <div class="main-container">
+            <!-- Header -->
+            <div class="header-section">
+                <h1><i class="fas fa-graduation-cap"></i> Publications & Research</h1>
+                <p class="lead">Academic contributions and research outputs</p>
+            </div>
+            
+            <!-- Content -->
+            <div class="content-section">
+                <!-- Main Publication -->
+                <div class="publication-card">
+                    <div class="publication-type conference">Conference Paper</div>
+                    <div class="status-badge published">Published</div>
+                    <h3>MsBiCNet: Multi-Stage Binary-Cascade CNN for Improving Skin Cancer Detection</h3>
+                    <p class="text-muted mb-3">
+                        <strong>Authors:</strong>Achyut Maheshka, Sanjivanee Jadhav, Pranav Mali, Soham Mhatre, Pramod H. Kachare, Sandeep Sangle<br>
+                        <strong>Published in:</strong> International Conference on Technologies for Energy, Agriculture, and Healthcare (ICTEAH) 2025<br>
+                        <strong>Date:</strong> 2025<br>
+                        <strong>Paper URL:</strong> <a href="https://drive.google.com/file/d/1xqZ1ijdgM9qj0a2_DdKK9awsnIsgIO-S/view?usp=sharing" target="_blank" class="text-primary">View Paper (PDF)</a>
+                    </p>
+                    
+                    <div class="abstract-preview" id="abstract1">
+                        <p><strong>Abstract:</strong> Skin cancer's rising incidence highlights the need for accurate detection to ensure effective
+treatment. Automatic skin cancer detection is challenging due to the visual similarity between
+benign and malignant lesions, requiring expert evaluation and specialized tools. Limited access to
+
+such resources increases the risk of misdiagnosis or delayed treatment. A multi-stage binary-
+cascade convolution neural network (MsBiCNet) is presented for automatic contactless skin cancer
+
+detection using raw images. The proposed MsBiCNet comprises a convolution neural network
+(CNN) applied sequentially in one-vs-rest stages for multiclass classification. The binary CNN
+(BiCNet) model has a sequential structure comprising four blocks for feature extraction, three for
+classification, and a softmax layer for predicting detection probability. Each feature extraction
+block comprises convolution and max-pooling layers for generating complex feature maps. Each
+classification block comprises a dense layer followed by a dropout layer to avoid overfitting and
+improve generalization. The BiCNet (malignant–vs.–benign) and the multiclass MsBiCNet (seven
+skin lesions) models are trained and evaluated using an open-source human against machine
+dataset. The results showed accuracies of 87.36% for BiCNet and 80.07% for MsBiCNet, with the
+MsBiCNet outperforming earlier reported multiclass models. The proposed models enable fast
+skin lesion diagnosis and may ease healthcare burdens.</p>
+                    </div>
+                    <span class="btn-expand" onclick="toggleAbstract('abstract1')">
+                        <i class="fas fa-chevron-down"></i> Show full abstract
+                    </span>
+                                        
+                    
+                    
+                    <div class="mt-3">
+                        <a href="/static/ICTEAH_2025_MsBiCNet.pdf" class="btn btn-primary me-2" target="_blank"><i class="fas fa-file-pdf"></i> Download PDF</a>
+                        <a href="https://github.com/achyut/skin-cancer-detection" class="btn btn-outline-primary me-2" target="_blank"><i class="fas fa-code"></i> View Code</a>
+                        <a href="/gallery" class="btn btn-outline-primary"><i class="fas fa-database"></i> Dataset Samples</a>
+                    </div>
+                </div>
+                
+                <!-- Publication Statistics -->
+                <div class="publication-card">
+                    <h3><i class="fas fa-chart-line text-primary"></i> Research Impact & Latest Achievements</h3>
+                    <div class="row">
+                        <div class="col-md-3">
+                            <div class="text-center">
+                                <div class="stat-number text-success">94.0%</div>
+                                <div class="text-muted">BCC Model Accuracy <span class="badge bg-success">NEW</span></div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="text-center">
+                                <div class="stat-number">96.1%</div>
+                                <div class="text-muted">Binary Classifier Accuracy</div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="text-center">
+                                <div class="stat-number">10,015</div>
+                                <div class="text-muted">Training Images</div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="text-center">
+                                <div class="stat-number">0.994</div>
+                                <div class="text-muted">BCC AUC Score <span class="badge bg-warning">BEST</span></div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="row mt-3">
+                        <div class="col-md-3">
+                            <div class="text-center">
+                                <div class="stat-number">+70.78%</div>
+                                <div class="text-muted">BCC F1-Score Improvement</div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="text-center">
+                                <div class="stat-number">7</div>
+                                <div class="text-muted">Lesion Classifications</div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="text-center">
+                                <div class="stat-number">5</div>
+                                <div class="text-muted">Optimized AI Models</div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="text-center">
+                                <div class="stat-number">2</div>
+                                <div class="text-muted">Architecture Types</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                                <div class="text-muted">AI Models</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Navigation -->
+                
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        function toggleAbstract(id) {
+            const element = document.getElementById(id);
+            const btn = element.nextElementSibling;
+            
+            if (element.classList.contains('expanded')) {
+                element.classList.remove('expanded');
+                btn.innerHTML = '<i class="fas fa-chevron-down"></i> Show full abstract';
+            } else {
+                element.classList.add('expanded');
+                btn.innerHTML = '<i class="fas fa-chevron-up"></i> Hide abstract';
+            }
+        }
+        
+        // Copy citation to clipboard
+        function copyCitation(text) {
+            navigator.clipboard.writeText(text).then(function() {
+                // Show success message
+                const toast = document.createElement('div');
+                toast.className = 'alert alert-success position-fixed';
+                toast.style.top = '20px';
+                toast.style.right = '20px';
+                toast.style.zIndex = '9999';
+                toast.innerHTML = '<i class="fas fa-check"></i> Citation copied to clipboard!';
+                document.body.appendChild(toast);
+                
+                setTimeout(() => {
+                    document.body.removeChild(toast);
+                }, 3000);
+            });
+        }
+    </script>
+</body>
+</html>

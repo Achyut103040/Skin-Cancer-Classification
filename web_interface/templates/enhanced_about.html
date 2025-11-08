@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About - Enhanced Skin Cancer Detection</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        
+        /* Professional Navigation Bar */
+        .top-navbar {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(79, 172, 254, 0.2);
+            padding: 0.8rem 0;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 20px rgba(0,0,0,0.1);
+        }
+        
+        .navbar-brand {
+            font-weight: 700;
+            font-size: 1.4rem;
+            color: #4facfe !important;
+            text-decoration: none;
+        }
+        
+        .navbar-nav .nav-link {
+            color: #333 !important;
+            font-weight: 500;
+            margin: 0 0.5rem;
+            padding: 0.5rem 1rem !important;
+            border-radius: 25px;
+            transition: all 0.3s ease;
+        }
+        
+        .navbar-nav .nav-link:hover {
+            background: linear-gradient(135deg, #4facfe, #00f2fe);
+            color: white !important;
+            transform: translateY(-2px);
+        }
+        
+        .nav-cta {
+            background: linear-gradient(135deg, #4facfe, #00f2fe) !important;
+            color: white !important;
+            font-weight: 600;
+            border-radius: 25px !important;
+            padding: 0.6rem 1.5rem !important;
+            margin-left: 1rem;
+        }
+        
+        .nav-cta:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(79, 172, 254, 0.4);
+        }
+        
+        .main-container {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            backdrop-filter: blur(10px);
+            margin: 6rem auto 2rem;
+            max-width: 1200px;
+        }
+        
+        .header-section {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+            border-radius: 20px 20px 0 0;
+            padding: 2rem;
+            text-align: center;
+        }
+        
+        .content-section {
+            padding: 2rem;
+        }
+        
+        .feature-card {
+            background: white;
+            border-radius: 15px;
+            padding: 2rem;
+            margin: 1rem 0;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            border-left: 5px solid #4facfe;
+        }
+        
+        .team-card {
+            background: white;
+            border-radius: 15px;
+            padding: 1.5rem;
+            margin: 1rem 0;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+        
+        .tech-badge {
+            background: linear-gradient(135deg, #4facfe, #00f2fe);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 25px;
+            margin: 0.25rem;
+            display: inline-block;
+            font-size: 0.9rem;
+        }
+        
+        .stat-item {
+            text-align: center;
+            padding: 1rem;
+        }
+        
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #4facfe;
+            margin-bottom: 0.5rem;
+        }
+        
+        .nav-link {
+            color: #4facfe;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        
+        .nav-link:hover {
+            color: #00f2fe;
+        }
+    </style>
+</head>
+<body>
+    <!-- Professional Navigation Bar -->
+    <nav class="navbar navbar-expand-lg top-navbar">
+        <div class="container">
+            <a class="navbar-brand" href="/">
+                <i class="fas fa-microscope"></i> SkinCancerAI
+            </a>
+            
+            <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <i class="fas fa-bars text-primary"></i>
+            </button>
+            
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/"><i class="fas fa-home"></i> Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/about"><i class="fas fa-info-circle"></i> About</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/gallery"><i class="fas fa-images"></i> Gallery</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/documentation"><i class="fas fa-book"></i> Docs</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/publications"><i class="fas fa-graduation-cap"></i> Publications</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/results"><i class="fas fa-chart-line"></i> Results</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/history"><i class="fas fa-clock"></i> History</a>
+                    </li>
+                </ul>
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link nav-cta" href="/contact"><i class="fas fa-envelope"></i> Contact</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="https://github.com/Achyut103040/Skin-Cancer-detection-and-Classification" target="_blank">
+                            <i class="fab fa-github"></i> GitHub
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container-fluid">
+        <div class="main-container">
+            <!-- Header -->
+            <div class="header-section">
+                <h1><i class="fas fa-user-md"></i> About the Researcher & Project</h1>
+                <p class="lead">Pioneering AI-driven dermatological diagnosis through innovative research and development</p>
+                
+            </div>
+            
+            <!-- Content -->
+            <div class="content-section">
+                <!-- Researcher Profile -->
+                <div class="feature-card">
+                    <h2><i class="fas fa-graduation-cap text-primary"></i> Researcher Profile</h2>
+                    <div class="row">
+                        <div class="col-md-8">
+                            <p class="lead">As a dedicated researcher in artificial intelligence and machine learning, I am passionate about leveraging cutting-edge technology to solve real-world healthcare challenges. This skin cancer detection system represents the culmination of extensive research into deep learning architectures, medical image analysis, and clinical applications.</p>
+                            
+                            <h4>🎓 Research Focus</h4>
+                            <ul>
+                                <li><strong>Medical AI:</strong> Developing intelligent systems for healthcare diagnosis</li>
+                                <li><strong>Deep Learning:</strong> Advanced neural network architectures and optimization</li>
+                                <li><strong>Computer Vision:</strong> Medical image analysis and interpretation</li>
+                                <li><strong>Explainable AI:</strong> Making AI decisions transparent and trustworthy</li>
+                            </ul>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="stat-item">
+                                <div class="stat-number">2025</div>
+                                <div>Research Year</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-number">ICTEAH</div>
+                                <div>Published Conference</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-number">96.1%</div>
+                                <div>Best Model Accuracy</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Project Mission -->
+                <div class="feature-card">
+                    <h2><i class="fas fa-bullseye text-primary"></i> Project Mission & Vision</h2>
+                    
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h4>🎯 Mission</h4>
+                            <p>To democratize access to high-quality dermatological screening through cutting-edge artificial intelligence, enabling early detection and improved patient outcomes worldwide.</p>
+                            
+                            <h4>🔬 Innovation</h4>
+                            <p>Our novel two-stage cascade approach combines binary malignant/benign classification with detailed benign subtype identification, providing both accuracy and clinical insight.</p>
+                        </div>
+                        <div class="col-md-6">
+                            <h4>🌟 Vision</h4>
+                            <p>To create an accessible, reliable, and explainable AI system that can assist healthcare professionals and empower individuals in early skin cancer detection.</p>
+                            
+                            <h4>🏥 Impact</h4>
+                            <p>Bridging the gap between advanced AI research and practical clinical application, making sophisticated diagnostic tools available to underserved communities.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- System Overview -->
+                <div class="feature-card">
+                    <h2><i class="fas fa-microscope text-primary"></i> System Overview</h2>
+                    <p class="lead">The Enhanced Skin Cancer Detection System leverages state-of-the-art deep learning to provide accurate, explainable diagnosis of skin lesions through a novel cascade architecture.</p>
+                    
+                    <div class="row mt-4">
+                        <div class="col-md-3 stat-item">
+                            <div class="stat-number">8,902</div>
+                            <div>Training Images</div>
+                        </div>
+                        <div class="col-md-3 stat-item">
+                            <div class="stat-number">7</div>
+                            <div>Lesion Types</div>
+                        </div>
+                        <div class="col-md-3 stat-item">
+                            <div class="stat-number">2</div>
+                            <div>Stage Architecture</div>
+                        </div>
+                        <div class="col-md-3 stat-item">
+                            <div class="stat-number">96.1%</div>
+                            <div>Peak Accuracy</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Performance Results -->
+                <div class="feature-card">
+                    <h2><i class="fas fa-chart-line text-primary"></i> Performance Results</h2>
+                    <p class="lead">Our two-stage cascade system achieves exceptional performance across multiple skin lesion types, with the binary classifier showing the highest overall accuracy.</p>
+                    
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h4>📊 Model Performance (Ordered by Dataset Size)</h4>
+                            <div class="table-responsive">
+                                <table class="table table-striped">
+                                    <thead class="table-primary">
+                                        <tr>
+                                            <th>Model Type</th>
+                                            <th>Accuracy</th>
+                                            <th>F1-Score</th>
+                                            <th>AUC</th>
+                                            <th>Samples</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr class="table-success">
+                                            <td><strong>Binary Classification</strong></td>
+                                            <td><strong>96.1%</strong></td>
+                                            <td><strong>96.25%</strong></td>
+                                            <td><strong>0.991</strong></td>
+                                            <td><strong>8,902</strong></td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>NV</strong> (Melanocytic Nevus)</td>
+                                            <td>92.14%</td>
+                                            <td>94.68%</td>
+                                            <td>0.970</td>
+                                            <td>6,705</td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>BKL</strong> (Benign Keratosis)</td>
+                                            <td>96.1%</td>
+                                            <td>96.25%</td>
+                                            <td>0.991</td>
+                                            <td>1,099</td>
+                                        </tr>
+                                        <tr class="table-warning">
+                                            <td><strong>BCC</strong> (Basal Cell) <span class="badge bg-success">UPDATED</span></td>
+                                            <td><strong>94.00%</strong></td>
+                                            <td><strong>94.31%</strong></td>
+                                            <td><strong>0.994</strong></td>
+                                            <td><strong>400</strong></td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>AKIEC</strong> (Actinic Keratosis)</td>
+                                            <td>81.90%</td>
+                                            <td>81.08%</td>
+                                            <td>0.968</td>
+                                            <td>327</td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>VASC</strong> (Vascular)</td>
+                                            <td>92.16%</td>
+                                            <td>93.33%</td>
+                                            <td>0.881</td>
+                                            <td>142</td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>DF</strong> (Dermatofibroma)</td>
+                                            <td>85.20%</td>
+                                            <td>82.15%</td>
+                                            <td>0.892</td>
+                                            <td>115</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <h4>🚀 Key Achievements</h4>
+                            <ul>
+                                <li><strong>Binary Classification Excellence:</strong> 96.1% accuracy on malignant vs benign with large dataset</li>
+                                <li><strong>BKL Model Innovation:</strong> ResNet18 architecture achieving superior performance</li>
+                                <li><strong>Robust Cascade Logic:</strong> Proper exclusion of classified samples</li>
+                                <li><strong>Balanced Training:</strong> Effective oversampling for minority classes</li>
+                                <li><strong>Comprehensive Evaluation:</strong> Confusion matrices and ROC curves for all models</li>
+                                <li><strong>Real-time Inference:</strong> Fast GPU-accelerated predictions</li>
+                            </ul>
+                            
+                            <div class="alert alert-info mt-3">
+                                <h6><i class="fas fa-lightbulb"></i> Innovation Highlight</h6>
+                                <p class="mb-0">The binary classifier achieves the highest accuracy (96.1%) by leveraging the largest training dataset (8,902 samples) with ResNet50 architecture and advanced optimization techniques including focal loss and one-cycle learning rate scheduling.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Dataset Information -->
+                <div class="feature-card">
+                    <h2><i class="fas fa-database text-primary"></i> Dataset Information</h2>
+                    
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h4>📋 HAM10000 Dataset</h4>
+                            <ul>
+                                <li><strong>Source:</strong> Harvard Dataverse</li>
+                                <li><strong>Total Images:</strong> 10,015 dermatoscopic images</li>
+                                <li><strong>Training Samples:</strong> 8,902 images (ordered by frequency)</li>
+                                <li><strong>Image Format:</strong> High-resolution JPEG</li>
+                                <li><strong>Metadata:</strong> Age, sex, localization information</li>
+                            </ul>
+                        </div>
+                        <div class="col-md-6">
+                            <h4>🏷️ Class Distribution (Highest to Lowest)</h4>
+                            <ul>
+                                <li><strong>NV (Melanocytic Nevus):</strong> 6,705 samples</li>
+                                <li><strong>BKL (Benign Keratosis):</strong> 1,099 samples</li>
+                                <li><strong>BCC (Basal Cell Carcinoma):</strong> 514 samples</li>
+                                <li><strong>AKIEC (Actinic Keratosis):</strong> 327 samples</li>
+                                <li><strong>VASC (Vascular Lesion):</strong> 142 samples</li>
+                                <li><strong>DF (Dermatofibroma):</strong> 115 samples</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Research Impact -->
+                <div class="feature-card">
+                    <h2><i class="fas fa-rocket text-primary"></i> Research Impact & Future Work</h2>
+                    
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h4>� Clinical Significance</h4>
+                            <ul>
+                                <li><strong>Early Detection:</strong> Enabling timely intervention for better patient outcomes</li>
+                                <li><strong>Accessibility:</strong> Bringing expert-level screening to remote areas</li>
+                                <li><strong>Cost-Effective:</strong> Reducing healthcare costs through automated screening</li>
+                                <li><strong>Educational:</strong> Training healthcare workers in developing regions</li>
+                            </ul>
+                        </div>
+                        <div class="col-md-6">
+                            <h4>🔮 Future Directions</h4>
+                            <ul>
+                                <li><strong>Multi-Modal Integration:</strong> Incorporating dermoscopy and clinical data</li>
+                                <li><strong>Real-Time Processing:</strong> Mobile and edge device deployment</li>
+                                <li><strong>Longitudinal Tracking:</strong> Monitoring lesion changes over time</li>
+                                <li><strong>Federated Learning:</strong> Privacy-preserving collaborative training</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Collaboration & Contact -->
+                <div class="feature-card">
+                    <h2><i class="fas fa-handshake text-primary"></i> Collaboration & Contact</h2>
+                    <p class="lead">I welcome collaboration opportunities with healthcare professionals, researchers, and institutions interested in advancing medical AI.</p>
+                    
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h4>🤝 Areas of Interest</h4>
+                            <ul>
+                                <li>Clinical validation studies</li>
+                                <li>Medical dataset collaboration</li>
+                                <li>Healthcare technology transfer</li>
+                                <li>Educational partnerships</li>
+                            </ul>
+                        </div>
+                        <div class="col-md-6">
+                            <h4>� Get in Touch</h4>
+                            <p>For research inquiries, collaboration proposals, or technical discussions, please visit our <a href="/contact" class="text-decoration-none">contact page</a> or explore our <a href="/publications" class="text-decoration-none">published research</a>.</p>
+                            
+                            <div class="mt-3">
+                                <a href="/contact" class="btn btn-primary me-2">
+                                    <i class="fas fa-envelope"></i> Contact Me
+                                </a>
+                                <a href="/publications" class="btn btn-outline-primary">
+                                    <i class="fas fa-graduation-cap"></i> View Publications
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Disclaimer -->
+                <div class="alert alert-warning">
+                    <h5><i class="fas fa-exclamation-triangle"></i> Medical Disclaimer</h5>
+                    <p class="mb-0">This AI system is designed for research and educational purposes only. It should not be used as a substitute for professional medical advice, diagnosis, or treatment. Always consult qualified healthcare providers for medical decisions.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
