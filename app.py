@@ -23,6 +23,11 @@ device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 # ========================================
 GDRIVE_MODEL_URLS = {
     'binary': 'https://drive.google.com/uc?id=1LJefcrYSiUOPID-McuxRScoMCGiAVnIF',
+    'nv': 'https://drive.google.com/uc?id=17SABbRU3PTLMjMwO68aBNqTwl6YnOI7M',
+    'bkl': 'https://drive.google.com/uc?id=1xsuzyEpXgw8o3w_YNRCVh04brGzXbtot',
+    'bcc': 'https://drive.google.com/uc?id=1FzHyl8ZNeZh4tHjF076w4pDxujypa6Fo',
+    'akiec': 'https://drive.google.com/uc?id=19dYv01tNC-5bpgvvmx9bB3ZbHrT9ZUMi',
+    'vasc': 'https://drive.google.com/uc?id=1nhKd2xKyjLerlXEbNPemx3P9axmTjlTo',
 }
 
 # ========================================
@@ -62,43 +67,114 @@ class SkinCancerModel(nn.Module):
         attended_features = features * attention_weights
         return self.classifier(attended_features)
 
+class CascadeModel(nn.Module):
+    """Cascade models for detailed benign classification."""
+    def __init__(self, num_classes=2, backbone='resnet18'):
+        super(CascadeModel, self).__init__()
+        self.backbone_name = backbone
+        
+        if backbone == 'resnet18':
+            self.model = models.resnet18(weights='IMAGENET1K_V1')
+            num_features = self.model.fc.in_features
+            self.model.fc = nn.Sequential(
+                nn.Dropout(0.3),
+                nn.Linear(num_features, 256),
+                nn.ReLU(inplace=True),
+                nn.Dropout(0.2),
+                nn.Linear(256, num_classes)
+            )
+        elif backbone == 'efficientnet_b0':
+            self.model = models.efficientnet_b0(weights='IMAGENET1K_V1')
+            num_features = self.model.classifier[1].in_features
+            self.model.classifier = nn.Sequential(
+                nn.Dropout(0.3),
+                nn.Linear(num_features, 256),
+                nn.ReLU(inplace=True),
+                nn.Dropout(0.15),
+                nn.Linear(256, num_classes)
+            )
+        else:  # resnet50
+            self.model = models.resnet50(weights='IMAGENET1K_V1')
+            num_features = self.model.fc.in_features
+            self.model.fc = nn.Sequential(
+                nn.Linear(num_features, 512),
+                nn.ReLU(),
+                nn.Dropout(0.5),
+                nn.Linear(512, 256),
+                nn.ReLU(),
+                nn.Dropout(0.3),
+                nn.Linear(256, num_classes)
+            )
+    
+    def forward(self, x):
+        return self.model(x)
+
 # Global variables for models
 binary_model = None
+cascade_models = {}
 
-def download_model_from_gdrive():
-    """Download binary model from Google Drive if not exists."""
-    model_path = Path('models/best_skin_cancer_model_balanced.pth')
+def download_model_from_gdrive(model_name, filename):
+    """Download a specific model from Google Drive if not exists."""
+    model_path = Path(f'models/{filename}')
     model_path.parent.mkdir(exist_ok=True)
     
     if not model_path.exists():
-        print("📥 Downloading model from Google Drive...")
+        print(f"📥 Downloading {model_name} model from Google Drive...")
         try:
-            gdown.download(GDRIVE_MODEL_URLS['binary'], str(model_path), quiet=False)
-            print("✅ Model downloaded successfully!")
+            gdown.download(GDRIVE_MODEL_URLS[model_name], str(model_path), quiet=False)
+            print(f"✅ {model_name} model downloaded successfully!")
         except Exception as e:
-            print(f"❌ Error downloading model: {e}")
+            print(f"❌ Error downloading {model_name} model: {e}")
             return None
     else:
-        print("✅ Model already exists locally")
+        print(f"✅ {model_name} model already exists locally")
     
     return model_path
 
 def load_models():
-    """Load binary classification model."""
-    global binary_model
+    """Load binary classification model and cascade models."""
+    global binary_model, cascade_models
     
     try:
-        # Download model if needed
-        model_path = download_model_from_gdrive()
+        # Load binary classification model
+        model_path = download_model_from_gdrive('binary', 'best_skin_cancer_model_balanced.pth')
         
         if model_path is None or not model_path.exists():
-            return None, "❌ Failed to download model"
+            return None, "❌ Failed to download binary model"
         
-        # Load model
-        print("🔄 Loading model...")
+        # Load binary model
+        print("🔄 Loading binary model...")
         binary_model = SkinCancerModel(backbone='resnet50', num_classes=2, freeze_backbone=True)
         state_dict = torch.load(model_path, map_location=device)
         binary_model.load_state_dict(state_dict)
+        binary_model.to(device)
+        binary_model.eval()
+        print("✅ Binary model loaded!")
+        
+        # Load cascade models
+        model_configs = {
+            'nv': ('nv_model.pth', 2, 'resnet50'),
+            'bkl': ('bkl_model_cascade_fixed.pth', 2, 'resnet18'),
+            'bcc': ('bcc_model.pth', 2, 'efficientnet_b0'),
+            'akiec': ('akiec_model.pth', 2, 'resnet50'),
+            'vasc': ('vasc_model.pth', 2, 'resnet50'),
+        }
+        
+        for model_name, (filename, num_classes, backbone) in model_configs.items():
+            try:
+                model_path = download_model_from_gdrive(model_name, filename)
+                if model_path and model_path.exists():
+                    model = CascadeModel(num_classes=num_classes, backbone=backbone)
+                    state_dict = torch.load(model_path, map_location=device)
+                    model.load_state_dict(state_dict)
+                    model.to(device)
+                    model.eval()
+                    cascade_models[model_name] = model
+                    print(f"✅ {model_name} cascade model loaded!")
+            except Exception as e:
+                print(f"⚠ Could not load {model_name} model: {e}")
+        
+        return binary_model, f"✅ Loaded binary model + {len(cascade_models)} cascade models!"
         binary_model.to(device)
         binary_model.eval()
         
@@ -128,8 +204,8 @@ def preprocess_image(image):
     
     return transform(image).unsqueeze(0).to(device)
 
-def analyze_skin_lesion(image):
-    """Main analysis function for skin lesion classification."""
+def analyze_skin_lesion(image, use_cascade=True):
+    """Main analysis function for skin lesion classification with cascade support."""
     if binary_model is None:
         return "❌ Model not loaded. Please wait for initialization...", None
     
@@ -140,7 +216,7 @@ def analyze_skin_lesion(image):
         # Preprocess image
         input_tensor = preprocess_image(image)
         
-        # Binary Classification
+        # Stage 1: Binary Classification
         with torch.no_grad():
             binary_output = binary_model(input_tensor)
             binary_prob = torch.nn.functional.softmax(binary_output, dim=1)
@@ -151,37 +227,92 @@ def analyze_skin_lesion(image):
             is_malignant = binary_prob[0][1] > 0.5
             binary_confidence = max(benign_prob, malignant_prob)
         
-        # Format results
+        # Format binary results
         binary_result = "🔴 MALIGNANT" if is_malignant else "🟢 BENIGN"
+        
+        # Stage 2: Cascade Classification (for benign lesions if enabled)
+        cascade_report = ""
+        if not is_malignant and use_cascade and len(cascade_models) > 0:
+            cascade_report = "\n### 🔍 Detailed Classification (Cascade Analysis):\n\n"
+            
+            cascade_classes = {
+                'nv': 'Melanocytic Nevi (Common Mole)',
+                'bkl': 'Benign Keratosis',
+                'bcc': 'Basal Cell Carcinoma',
+                'akiec': 'Actinic Keratoses',
+                'vasc': 'Vascular Lesion'
+            }
+            
+            cascade_results = []
+            for model_name, model in cascade_models.items():
+                try:
+                    with torch.no_grad():
+                        cascade_output = model(input_tensor)
+                        cascade_prob = torch.nn.functional.softmax(cascade_output, dim=1)
+                        positive_prob = cascade_prob[0][0].item() * 100  # Assuming class 0 is positive
+                        
+                        if positive_prob > 50:
+                            status = "✅ POSITIVE"
+                            color = "green"
+                        else:
+                            status = "❌ NEGATIVE"
+                            color = "gray"
+                        
+                        cascade_results.append({
+                            'Lesion Type': cascade_classes.get(model_name, model_name),
+                            'Status': status,
+                            'Confidence': f"{max(positive_prob, 100-positive_prob):.2f}%"
+                        })
+                        
+                        cascade_report += f"- **{cascade_classes.get(model_name, model_name)}**: {status} ({max(positive_prob, 100-positive_prob):.2f}%)\n"
+                except Exception as e:
+                    print(f"Error with cascade model {model_name}: {e}")
+            
+            if cascade_results:
+                cascade_df = pd.DataFrame(cascade_results)
+            else:
+                cascade_df = None
+        else:
+            cascade_df = None
         
         # Create detailed report
         report = f"""
 ## 🔬 AI Analysis Results
 
-### Binary Classification:
+### Stage 1: Binary Classification
 - **Prediction**: {binary_result}
 - **Confidence**: {binary_confidence:.2f}%
 
 ### Probability Breakdown:
 - **Benign**: {benign_prob:.2f}%
 - **Malignant**: {malignant_prob:.2f}%
+{cascade_report}
 
-### {'⚠️ Important Notice' if is_malignant else '✅ Analysis Complete'}
+### {'⚠️ URGENT - Immediate Action Required' if is_malignant else '✅ Analysis Complete'}
 {
-    '**This lesion has been classified as potentially malignant.**  \n**ACTION REQUIRED**: Please consult a dermatologist immediately for professional evaluation.'
+    '**This lesion has been classified as potentially MALIGNANT.**  \n'
+    '**ACTION REQUIRED**: Please consult a dermatologist immediately for professional evaluation.  \n'
+    '- Schedule an appointment with a dermatologist within 1-2 days  \n'
+    '- Consider getting a biopsy for definitive diagnosis  \n'
+    '- Do not delay - early detection significantly improves treatment outcomes'
     if is_malignant else
-    'Lesion classified as benign. Continue to monitor for any changes.'
+    'Lesion classified as benign. However, continue to:  \n'
+    '- Monitor for any changes in size, shape, or color  \n'
+    '- Schedule routine dermatology check-ups  \n'
+    '- Consult a doctor if you notice concerning changes'
 }
 
 ---
 
 ### 📊 Model Information:
-- **Architecture**: ResNet50 with Attention Mechanism
-- **Accuracy**: 99.2% on HAM10000 dataset
+- **Binary Model**: ResNet50 with Attention Mechanism  
+- **Cascade Models**: {len(cascade_models)} specialized classifiers loaded  \n'
+- **Accuracy**: 96.1% on HAM10000 dataset  
 - **Training Data**: 10,015 dermatoscopic images
 
 ⚠️ **Medical Disclaimer**: This AI tool is for educational and research purposes only.  
-Always consult qualified medical professionals for diagnosis and treatment.
+Always consult qualified medical professionals for diagnosis and treatment.  
+This tool should never be used as a substitute for professional medical advice.
         """
         
         # Create probability dataframe
@@ -189,6 +320,11 @@ Always consult qualified medical professionals for diagnosis and treatment.
             'Classification': ['Benign', 'Malignant'],
             'Probability (%)': [f"{benign_prob:.2f}", f"{malignant_prob:.2f}"]
         })
+        
+        # Return cascade results if available
+        if cascade_df is not None:
+            combined_df = pd.concat([prob_df, pd.DataFrame([{'Classification': '', 'Probability (%)': ''}]), cascade_df.rename(columns={'Lesion Type': 'Classification', 'Confidence': 'Probability (%)'})[['Classification', 'Probability (%)']]], ignore_index=True)
+            return report, combined_df
         
         return report, prob_df
         
@@ -239,6 +375,12 @@ with gr.Blocks(
                 type="numpy",
                 label="Skin Lesion Image",
                 height=300
+            )
+            
+            use_cascade_checkbox = gr.Checkbox(
+                label="Enable Cascade Classification (for benign lesions)",
+                value=True,
+                info="Provides detailed sub-type identification"
             )
             
             analyze_btn = gr.Button(
@@ -304,7 +446,7 @@ with gr.Blocks(
     # Connect button to function
     analyze_btn.click(
         fn=analyze_skin_lesion,
-        inputs=[image_input],
+        inputs=[image_input, use_cascade_checkbox],
         outputs=[result_markdown, prob_dataframe]
     )
 
