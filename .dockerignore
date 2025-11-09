@@ -1,0 +1,67 @@
+# Python cache
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+
+# Virtual environments
+my_env/
+venv/
+env/
+ENV/
+
+# Model files - will be downloaded from Google Drive
+models/*.pth
+*.pth
+
+# Datasets - too large
+HAM10000_images_part_1/
+HAM10000_images_part_2/
+combined_dataset/
+kfold_combined_dataset/
+images/
+
+# Training outputs
+training_results/
+kfold_results_5fold/
+bcc_experiments/
+benign_cascade_results/
+cascade_evaluation_results/
+final_comparison_report/
+model_explanations/
+
+# Deployment packages
+deployment_package/
+
+# Documentation
+*.pdf
+*.docx
+*.md
+!README.md
+!requirements*.txt
+
+# Batch scripts
+*.bat
+*.sh
+
+# Git
+.git/
+.github/
+.gitignore
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Misc
+*.csv
+*.json
+*.png
+confusion_matrix_balanced.png

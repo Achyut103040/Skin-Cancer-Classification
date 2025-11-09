@@ -1,4 +1,20 @@
-# 🚀 Railway Deployment Guide - 5GB Storage!
+# 🚀 Railway Deployment Guide - 5GB Storage! (FIXED ✅)
+
+## ✅ What Was Fixed
+The previous error was:
+```
+ERROR: Could not open requirements file: [Errno 2] No such file or directory: 'requirements_flask_deploy.txt'
+```
+
+**Solutions Applied:**
+1. ✅ Created `nixpacks.toml` - tells Railway which requirements file to use
+2. ✅ Added missing dependencies to `requirements_flask_deploy.txt` (gdown, pandas, Flask-CORS, matplotlib)
+3. ✅ Fixed `railway.json` - removed conflicting buildCommand
+4. ✅ Updated `Procfile` - cleaner deployment command
+
+**Status**: Ready to deploy! 🚀
+
+---
 
 ## Why Railway?
 - ✅ **5GB Persistent Storage** (vs Render's 512MB)
@@ -17,15 +33,15 @@
 2. **Sign up** with GitHub
 3. **Click**: "New Project" → "Deploy from GitHub repo"
 4. **Select**: `Achyut103040/Skin-Cancer-Classification`
-5. **Add Variables**:
-   - `PORT`: 8080
-   - `PYTHON_VERSION`: 3.11.0
-   - `MODEL_PATH`: ./models
-6. **Set Start Command**:
-   ```
-   gunicorn web_interface.enhanced_app:app --bind 0.0.0.0:$PORT --workers 2 --timeout 120
-   ```
-7. **Deploy!** 🚀
+5. **Railway will auto-detect** `nixpacks.toml` and deploy Flask app
+6. **Wait ~5-10 minutes** for build (downloads PyTorch + models)
+7. **Get your URL** from Railway dashboard
+8. **Done!** 🎉
+
+**Note**: Railway now automatically uses the correct configuration files:
+- `nixpacks.toml` - build configuration
+- `requirements_flask_deploy.txt` - Python dependencies
+- `Procfile` - start command
 
 ---
 

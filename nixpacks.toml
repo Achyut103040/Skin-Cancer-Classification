@@ -1,15 +1,16 @@
 [phases.setup]
-nixPkgs = ["python311", "gcc"]
+nixPkgs = ["python311"]
 
 [phases.install]
 cmds = [
     "python -m venv --copies /opt/venv",
     ". /opt/venv/bin/activate && pip install --upgrade pip",
-    ". /opt/venv/bin/activate && pip install -r requirements_flask_deploy.txt"
+    ". /opt/venv/bin/activate && pip install --no-cache-dir torch==2.0.1+cpu torchvision==0.15.2+cpu --extra-index-url https://download.pytorch.org/whl/cpu",
+    ". /opt/venv/bin/activate && pip install --no-cache-dir -r requirements_flask_deploy.txt"
 ]
 
 [phases.build]
-cmds = ["echo 'Build phase complete'"]
+cmds = ["echo 'Build complete - models will download from Google Drive on startup'"]
 
 [start]
-cmd = "gunicorn web_interface.enhanced_app:app --bind 0.0.0.0:$PORT --workers 2 --timeout 120 --preload"
+cmd = "gunicorn web_interface.enhanced_app:app --bind 0.0.0.0:$PORT --workers 1 --timeout 180 --preload"
