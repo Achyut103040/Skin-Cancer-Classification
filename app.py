@@ -34,7 +34,7 @@ GDRIVE_MODEL_URLS = {
 # MODEL ARCHITECTURE DEFINITIONS
 # ========================================
 class SkinCancerModel(nn.Module):
-    """Enhanced ResNet50 model with attention mechanism."""
+    """Original Binary Classification Model - ResNet50 with Complex Classifier."""
     def __init__(self, backbone='resnet50', num_classes=2, freeze_backbone=True):
         super(SkinCancerModel, self).__init__()
         
@@ -43,18 +43,25 @@ class SkinCancerModel(nn.Module):
             num_features = self.backbone.fc.in_features
             self.backbone.fc = nn.Identity()
             
-            self.attention = nn.Sequential(
-                nn.Linear(num_features, 256),
-                nn.Tanh(),
-                nn.Linear(256, 1),
-                nn.Sigmoid()
-            )
-            
+            # Original complex classifier with BatchNorm layers
             self.classifier = nn.Sequential(
-                nn.Linear(num_features, 512),
-                nn.ReLU(),
+                nn.Linear(num_features, 1024),
+                nn.BatchNorm1d(1024),
+                nn.ReLU(inplace=True),
+                nn.Dropout(0.6),
+                nn.Linear(1024, 512),
+                nn.BatchNorm1d(512),
+                nn.ReLU(inplace=True),
+                nn.Dropout(0.5),
+                nn.Linear(512, 256),
+                nn.BatchNorm1d(256),
+                nn.ReLU(inplace=True),
+                nn.Dropout(0.4),
+                nn.Linear(256, 128),
+                nn.BatchNorm1d(128),
+                nn.ReLU(inplace=True),
                 nn.Dropout(0.3),
-                nn.Linear(512, num_classes)
+                nn.Linear(128, num_classes)
             )
         
         if freeze_backbone:
@@ -63,9 +70,7 @@ class SkinCancerModel(nn.Module):
     
     def forward(self, x):
         features = self.backbone(x)
-        attention_weights = self.attention(features)
-        attended_features = features * attention_weights
-        return self.classifier(attended_features)
+        return self.classifier(features)
 
 class CascadeModel(nn.Module):
     """Cascade models for detailed benign classification."""
@@ -272,6 +277,17 @@ def analyze_skin_lesion(image, use_cascade=True):
             cascade_df = None
         
         # Create detailed report
+        malignant_msg = """**This lesion has been classified as potentially MALIGNANT.**  
+**ACTION REQUIRED**: Please consult a dermatologist immediately for professional evaluation.  
+- Schedule an appointment with a dermatologist within 1-2 days  
+- Consider getting a biopsy for definitive diagnosis  
+- Do not delay - early detection significantly improves treatment outcomes"""
+        
+        benign_msg = """Lesion classified as benign. However, continue to:  
+- Monitor for any changes in size, shape, or color  
+- Schedule routine dermatology check-ups  
+- Consult a doctor if you notice concerning changes"""
+        
         report = f"""
 ## 🔬 AI Analysis Results
 
@@ -285,24 +301,13 @@ def analyze_skin_lesion(image, use_cascade=True):
 {cascade_report}
 
 ### {'⚠️ URGENT - Immediate Action Required' if is_malignant else '✅ Analysis Complete'}
-{
-    '**This lesion has been classified as potentially MALIGNANT.**  \n'
-    '**ACTION REQUIRED**: Please consult a dermatologist immediately for professional evaluation.  \n'
-    '- Schedule an appointment with a dermatologist within 1-2 days  \n'
-    '- Consider getting a biopsy for definitive diagnosis  \n'
-    '- Do not delay - early detection significantly improves treatment outcomes'
-    if is_malignant else
-    'Lesion classified as benign. However, continue to:  \n'
-    '- Monitor for any changes in size, shape, or color  \n'
-    '- Schedule routine dermatology check-ups  \n'
-    '- Consult a doctor if you notice concerning changes'
-}
+{malignant_msg if is_malignant else benign_msg}
 
 ---
 
 ### 📊 Model Information:
-- **Binary Model**: ResNet50 with Attention Mechanism  
-- **Cascade Models**: {len(cascade_models)} specialized classifiers loaded  \n'
+- **Binary Model**: ResNet50 with Deep Classifier  
+- **Cascade Models**: {len(cascade_models)} specialized classifiers loaded
 - **Accuracy**: 96.1% on HAM10000 dataset  
 - **Training Data**: 10,015 dermatoscopic images
 
@@ -321,14 +326,6 @@ This tool should never be used as a substitute for professional medical advice.
         if cascade_df is not None:
             combined_df = pd.concat([prob_df, pd.DataFrame([{'Classification': '', 'Probability (%)': ''}]), cascade_df.rename(columns={'Lesion Type': 'Classification', 'Confidence': 'Probability (%)'})[['Classification', 'Probability (%)']]], ignore_index=True)
             return report, combined_df
-        
-        return report, prob_df
-        
-    except Exception as e:
-        error_msg = f"❌ Error during analysis: {str(e)}"
-        print(error_msg)
-        return error_msg, None
-"""
         
         return report, prob_df
         
@@ -438,13 +435,14 @@ Always consult qualified medical professionals for diagnosis and treatment.
     MsBiCNet (Multi-stage Binary Cascade Network) uses **6 specialized deep learning models** for comprehensive skin lesion analysis:
     
     ### 🔬 Stage 1: Binary Classification
-    **Model**: ResNet50 with Attention Mechanism  
+    **Model**: ResNet50 with Deep Classifier  
     **Purpose**: Primary classification (Benign vs Malignant)  
     **Accuracy**: 96.1% on test set  
     **Architecture**: 
     - ResNet50 backbone (pre-trained on ImageNet)
-    - Custom attention mechanism for feature weighting
-    - Specialized classification head with dropout regularization
+    - Deep classifier with 5 layers (1024→512→256→128→2)
+    - BatchNorm and Dropout for regularization
+    - 96.1% accuracy on HAM10000 test set
     
     ### 🔍 Stage 2: Cascade Classification (5 Specialized Models)
     When a lesion is classified as benign, it's analyzed by 5 specialized cascade models:
