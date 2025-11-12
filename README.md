@@ -1,15 +1,66 @@
-# DermAI Detect - Skin Cancer Detection with Explainable AI
+---
+title: MsBiCNet - Skin Cancer Detection AI
+emoji: 🔬
+colorFrom: blue
+colorTo: red
+sdk: gradio
+sdk_version: 5.0.0
+app_file: app.py
+pinned: false
+license: mit
+---
 
-This project implements a state-of-the-art skin cancer detection system that combines advanced deep learning models with explainable AI techniques. The system can classify dermatoscopic images as benign or malignant with high accuracy, while providing visual explanations for its decisions using GradCAM, SHAP, and LIME techniques.
+# MsBiCNet - Multi-stage Binary Cascade Network
+
+AI-powered skin cancer detection system with **96.1% accuracy** on HAM10000 dataset. Featuring 6 specialized deep learning models for comprehensive skin lesion analysis.
+
+## 🚀 New: Mobile App Available!
+
+📱 **Cross-platform mobile app** for Android, iOS, and Desktop is now available in the `mobile_app/` folder!
+
+- ✅ **6 AI Models**: Binary + 5 Cascade classifiers
+- ✅ **Material Design UI**: Modern, responsive interface
+- ✅ **Offline Ready**: Models cached after first download
+- ✅ **Multi-Page App**: Home, Analysis, History, About, Publications
+
+👉 **[Get Started with Mobile App](mobile_app/README.md)**  
+📖 **[Complete Mobile Deployment Guide](MOBILE_APP_GUIDE.md)**
+
+---
+
+## 📱 Platform Options
+
+Choose your deployment platform:
+
+| Platform | Best For | Status |
+|----------|----------|--------|
+| **[Mobile App](mobile_app/)** | Android, iOS, Desktop | ✅ Ready |
+| **[Gradio Web App](app.py)** | Hugging Face Spaces | ✅ Live |
+| **[Streamlit App](streamlit_enhanced_app.py)** | Web deployment | ✅ Ready |
+
+---
 
 ## Featured Publication
-- **MsBiCNet**: Multi-scale Bi-path Convolutional Network for Skin Cancer Classification
+- **MsBiCNet**: Multi-stage Binary Cascade Network for Skin Cancer Detection
 - Published in **ICTEAH 2025** (International Conference on Technology Enhanced Academic Health)
 
 ## Project Structure
 
 ```
 d:\Skin Cancer\
+├── mobile_app/                    # 📱 NEW: Mobile App (Android/iOS/Desktop)
+│   ├── main.py                    # Main app entry
+│   ├── buildozer.spec             # Android build config
+│   ├── models/
+│   │   └── model_manager.py       # 6 AI models handler
+│   └── screens/                   # Multi-page UI
+│       ├── home_screen.py
+│       ├── analysis_screen.py
+│       ├── history_screen.py
+│       ├── about_screen.py
+│       └── publications_screen.py
+├── app.py                         # Gradio web app
+├── streamlit_enhanced_app.py      # Streamlit web app
 ├── model_explanations/
 │   ├── shap_explanations.py
 │   ├── lime_explanations.py
@@ -20,7 +71,7 @@ d:\Skin Cancer\
 │   ├── lime_results/
 │   └── gradcam_results/
 ├── web_interface/
-│   ├── app.py
+│   ├── enhanced_app.py            # Flask web interface
 │   ├── templates/
 │   │   ├── index.html
 │   │   ├── layout.html

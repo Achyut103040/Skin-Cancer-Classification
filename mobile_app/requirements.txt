@@ -1,0 +1,24 @@
+# MsBiCNet Mobile App Requirements
+# Python 3.9+ required
+
+# Kivy Framework
+kivy==2.2.1
+kivymd==1.1.1
+
+# PyTorch for AI models (CPU version for mobile)
+torch==2.0.1
+torchvision==0.15.2
+
+# Image processing
+Pillow==10.0.0
+numpy==1.24.3
+
+# Model downloading
+gdown>=4.7.1
+
+# Android/iOS build tools
+buildozer==1.5.0  # For Android APK
+kivy-ios==1.4.0   # For iOS IPA (macOS only)
+
+# Additional utilities
+python-for-android==2023.1.29  # Android backend
