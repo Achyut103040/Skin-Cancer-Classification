@@ -1,0 +1,27 @@
+# Buildozer & Android build artifacts
+.buildozer/
+bin/
+*.apk
+*.aab
+*.keystore
+
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Model weights (if large, add specific files)
+models/*.pt
+models/*.pth
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# IDE files
+.vscode/
+.idea/
